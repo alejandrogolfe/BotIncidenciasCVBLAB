@@ -13,7 +13,7 @@ ENV N8N_IMPORT_MODE=overwrite_unchanged
 ENV N8N_BASIC_AUTH_ACTIVE=true
 
 # Configuración de host y protocolo
-ENV N8N_HOST=n8ncvblab2.onrender.com
+ENV N8N_HOST=botincidenciascvblab.onrender.com
 ENV N8N_PROTOCOL=https
 
 # Exponer puerto
