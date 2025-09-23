@@ -7,9 +7,6 @@ WORKDIR /home/node
 # Crear carpeta de workflows y copiar el workflow
 RUN mkdir -p /home/node/workflows/
 COPY workflow.json /home/node/workflows/
-RUN chown -R node:node /home/node/workflows/
-RUN chmod -R 755 /home/node/workflows/
-
 
 # Configuración de n8n
 ENV N8N_IMPORT_EXPORT_DIR=/home/node/workflows/
