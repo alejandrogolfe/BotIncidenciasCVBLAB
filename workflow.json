@@ -1,0 +1,230 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {
+        "channelIds": [
+          "1411989033353089114"
+        ],
+        "value": "bug"
+      },
+      "type": "@jordanburke/n8n-nodes-discord.discordTrigger",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        0
+      ],
+      "id": "a0c722ff-5b69-474b-9cc0-a62386e938c8",
+      "name": "Discord Trigger",
+      "webhookId": "20f174cc-0c7b-41c7-8cd0-d80c70b6a7cc",
+      "credentials": {
+        "discordApi": {
+          "id": "WugwLmY0m1Co5JS5",
+          "name": "Discord App account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "webhook",
+        "content": "Incidencia registrada en Jira correctamente!",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "d53ed14a-c57e-4fa1-a425-77e13171d408",
+      "name": "Discord",
+      "webhookId": "2636dee0-22df-4c5a-8fa9-ac52c27dc7a6",
+      "credentials": {
+        "discordWebhookApi": {
+          "id": "9c0zijNAeyZB6aWs",
+          "name": "Discord Webhook account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "project": {
+          "__rl": true,
+          "value": "10106",
+          "mode": "list",
+          "cachedResultName": "PixNormous Pruebas Automatizacion"
+        },
+        "issueType": {
+          "__rl": true,
+          "value": "10119",
+          "mode": "list",
+          "cachedResultName": "Tarea"
+        },
+        "summary": "={{$node[\"Discord Trigger\"].json[\"content\"][\"text\"]}}",
+        "additionalFields": {
+          "assignee": {
+            "__rl": true,
+            "value": "712020:6bfe2494-7543-42a6-bf47-7a6e13b1b41d",
+            "mode": "list",
+            "cachedResultName": "Alejandro Golfe San Martín"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.jira",
+      "typeVersion": 1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "4c7a6d6b-7b27-4e4f-91ab-8c63561751bd",
+      "name": "Create an issue",
+      "credentials": {
+        "jiraSoftwareCloudApi": {
+          "id": "0cZCEPo6Tuu8kj5T",
+          "name": "Jira SW Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://pixnormous-it-cvblab.atlassian.net/rest/agile/1.0/board/36/sprint",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "jiraSoftwareCloudApi",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        608,
+        -272
+      ],
+      "id": "ca6e6106-441b-45da-894b-76b8f8221253",
+      "name": "HTTP Request",
+      "credentials": {
+        "jiraSoftwareCloudApi": {
+          "id": "0cZCEPo6Tuu8kj5T",
+          "name": "Jira SW Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://pixnormous-it-cvblab.atlassian.net/rest/agile/1.0/sprint/{{$json[\"values\"][0][\"id\"]}}/issue",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "jiraSoftwareCloudApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"issues\": [\"{{ $node['Create an issue'].json['key'] }}\"]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        800,
+        -272
+      ],
+      "id": "21a23543-c53d-4cd3-8af4-0ad9f98d915b",
+      "name": "HTTP Request1",
+      "credentials": {
+        "jiraSoftwareCloudApi": {
+          "id": "0cZCEPo6Tuu8kj5T",
+          "name": "Jira SW Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cf533147-13c3-4063-b72a-7b773bd7a7ff",
+              "leftValue": "={{ $json[\"content\"][\"text\"].toLowerCase().startsWith(\"/incidencia\") }}",
+              "rightValue": "/incidencia",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -16,
+        0
+      ],
+      "id": "b74c4b09-ef65-42fb-a3ba-28cc76ad76e7",
+      "name": "If"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Discord Trigger": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create an issue": {
+      "main": [
+        [
+          {
+            "node": "Discord",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Create an issue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "694af3e6-b2c4-4813-861c-55f3c1f7788a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "65c55b967d907d52d2a6c27593431e2ca04be7a55281b304f53c58dc7b67c033"
+  },
+  "id": "hZoiOrui0Z9JzJp0",
+  "tags": []
+}
