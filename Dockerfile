@@ -20,4 +20,4 @@ ENV N8N_PROTOCOL=https
 EXPOSE 5678
 
 # Comando por defecto
-CMD ["n8n"]
+ENTRYPOINT ["n8n"]
