@@ -3,7 +3,7 @@ FROM n8nio/n8n:latest
 WORKDIR /home/node
 
 # Copiar workflows
-COPY workflows /home/node/workflows
+COPY workflow.json /home/node/workflows
 
 # Configuración de n8n
 ENV N8N_IMPORT_EXPORT_DIR=/home/node/workflows
