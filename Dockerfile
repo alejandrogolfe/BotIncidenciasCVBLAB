@@ -25,4 +25,5 @@ ENV N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=false
 EXPOSE 5678
 
 # Comando por defecto
-ENTRYPOINT ["sh", "-c", "n8n import:workflow --input=/home/node/workflows/workflow.json && n8n"]
+COPY startup.sh /home/node/startup.sh
+ENTRYPOINT ["/home/node/startup.sh"]
