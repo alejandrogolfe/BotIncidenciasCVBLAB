@@ -7,6 +7,10 @@ WORKDIR /home/node
 # Crear carpeta de workflows y copiar el workflow
 RUN mkdir -p /home/node/workflows/
 COPY workflow.json /home/node/workflows/
+# Instalar nodo de la comunidad (Discord)
+RUN npm install @jordanburke/n8n-nodes-discord --production --prefix /home/node/.n8n/nodes
+
+
 
 # Configuración de n8n
 ENV N8N_IMPORT_EXPORT_DIR=/home/node/workflows/
